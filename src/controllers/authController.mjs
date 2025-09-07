@@ -29,7 +29,8 @@ export const register = async (req, res) => {
     });
 
     const token = generateToken(user);
-    res.status(201).json({ token, user });
+    const { password: _, ...userData } = user.toObject();
+    res.status(201).json({ token, user: userData, status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
