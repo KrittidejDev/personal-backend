@@ -78,3 +78,20 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// get me
+export const getMe = async (req, res) => {
+  try {
+    // req.user ถูก inject จาก protect middleware
+    const user = await User.findById(req.user.id).select("-password"); // เอา password ออก
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // ถ้า avatar ยังว่าง ให้ใส่ default
+    if (!user.avatar) user.avatar = "https://example.com/default-avatar.png";
+
+    res.status(200).json({ ...user, status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
