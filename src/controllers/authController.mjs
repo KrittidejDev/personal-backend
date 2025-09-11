@@ -4,7 +4,6 @@ import { generateToken } from "../services/jwtService.mjs";
 
 // Register
 export const register = async (req, res) => {
-  console.log("Request body:", req.body);
   try {
     const { email, username, password, name, role } = req.body;
     if (!email || !password)
