@@ -1,18 +1,18 @@
 import cloudinary from "../config/cloundinaryConfig.mjs";
-import fs from "fs";
+import cloudinary from "../config/cloudinaryConfig.mjs";
 
-export const uploadFile = async (file) => {
-  try {
-    const result = await cloudinary.uploader.upload(file.path, {
-      folder: "my_uploads", // โฟลเดอร์บน Cloudinary
-    });
+export const uploadFile = (file) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "my_uploads" },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
 
-    fs.unlinkSync(file.path); // ลบไฟล์ temp
-
-    return result; // จะมี url, public_id, etc.
-  } catch (error) {
-    throw error;
-  }
+    stream.end(file.buffer);
+  });
 };
 
 export const deleteFile = async (publicId) => {

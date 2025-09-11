@@ -6,7 +6,10 @@ import {
 } from "../controllers/uploadController.mjs";
 
 const router = express.Router();
-const upload = multer({ dest: "uploads/" });
+import multer from "multer";
+
+const storage = multer.memoryStorage();
+export const upload = multer({ storage: storage });
 
 router.post("/upload", upload.single("file"), uploadController);
 router.delete("/delete", deleteController);
