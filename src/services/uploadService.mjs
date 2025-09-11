@@ -1,5 +1,4 @@
 import cloudinary from "../config/cloundinaryConfig.mjs";
-import cloudinary from "../config/cloudinaryConfig.mjs";
 
 export const uploadFile = (file) => {
   return new Promise((resolve, reject) => {

@@ -6,7 +6,6 @@ import {
 } from "../controllers/uploadController.mjs";
 
 const router = express.Router();
-import multer from "multer";
 
 const storage = multer.memoryStorage();
 export const upload = multer({ storage: storage });
