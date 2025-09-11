@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   name: { type: String },
   avatar: { type: String },
+  bio: { type: String, default: "" },
   role: { type: String, enum: ["user", "admin"], default: "user" },
   createdAt: { type: Date, default: Date.now },
 });

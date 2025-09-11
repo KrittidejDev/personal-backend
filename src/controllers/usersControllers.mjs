@@ -16,7 +16,9 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const updatedUser = await userService.updateUser(req.params.id, req.body);
-    res.status(200).json({ user: updatedUser, status: 200 });
+    const { password: _, ...updatedUserData } = updatedUser.toObject();
+
+    res.status(200).json({ user: updatedUserData, status: 200 });
   } catch (err) {
     console.error(err);
     res.status(400).json({ message: err.message });
