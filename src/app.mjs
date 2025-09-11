@@ -7,6 +7,7 @@ import connectDB from "./config/db.mjs";
 import authRoutes from "./routes/authRoutes.mjs";
 import oauthRoutes from "./routes/oauthRoutes.mjs";
 import userRoutes from "./routes/usersRoutes.mjs";
+import uploadRoute from "./routes/uploadRoute.mjs";
 
 const app = express();
 connectDB();
@@ -22,9 +23,12 @@ app.use(passport.initialize());
 app.use("/api/auth", authRoutes);
 app.use("/api/oauth", oauthRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/files", uploadRoute);
 
 app.get("/test", (req, res) => {
   res.status(200).json({ message: "Test route works!" });
 });
+
+// app.listen(4000);
 
 export default app;

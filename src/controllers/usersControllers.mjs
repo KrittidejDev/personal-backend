@@ -31,12 +31,17 @@ export const changePassword = async (req, res) => {
       return res.status(400).json({ message: "Old and new password required" });
     }
 
-    await userService.changePassword(req.params.id, oldPassword, newPassword);
+    const data = await userService.changePassword(
+      req.params.id,
+      oldPassword,
+      newPassword
+    );
+
+    console.log(data);
     res
       .status(200)
       .json({ message: "Password updated successfully", status: 200 });
   } catch (err) {
-    console.error(err);
     res.status(400).json({ message: err.message });
   }
 };
