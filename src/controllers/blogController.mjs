@@ -12,10 +12,11 @@ export const createBlog = async (req, res) => {
 
     const blogData = {
       title,
-      subtitle, // ✅ เพิ่ม subtitle
+      subTitle,
       content,
       category,
       image,
+      status: status || "Draft",
       author: req.user._id,
     };
 
@@ -50,19 +51,14 @@ export const getBlogById = async (req, res) => {
 // ✅ อัปเดต Blog
 export const updateBlog = async (req, res) => {
   try {
-    const { title, subtitle, content, category, image } = req.body;
-
     const data = {
-      title,
-      subtitle, // ✅ เพิ่ม subtitle
-      content,
-      category,
-      image: image || undefined,
+      ...req.body,
+      image: req.body.image || undefined,
+      status: req.body.status, // อัปเดต status ได้
     };
 
     const blog = await blogService.updateBlog(req.params.id, data);
     if (!blog) return res.status(404).json({ message: "Blog not found" });
-
     res.json(blog);
   } catch (err) {
     res.status(400).json({ error: err.message });

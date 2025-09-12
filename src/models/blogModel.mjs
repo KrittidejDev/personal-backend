@@ -17,6 +17,11 @@ const blogSchema = new mongoose.Schema(
     },
     image: { type: String },
     likesCount: { type: Number, default: 0 },
+    status: {
+      type: String,
+      enum: ["Draft", "Publish"],
+      default: "Draft",
+    },
   },
   { timestamps: true }
 );
