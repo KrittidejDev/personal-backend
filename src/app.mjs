@@ -37,6 +37,6 @@ app.get("/test", (req, res) => {
   res.status(200).json({ message: "Test route works!" });
 });
 
-app.listen(4000);
+// app.listen(4000);
 
 export default app;
