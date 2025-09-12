@@ -1,5 +1,5 @@
 import * as blogService from "../services/blogService.mjs";
-import { Category } from "../models/categoryModel.mjs";
+import { Category } from "../models/CategoryModel.mjs";
 
 // ✅ สร้าง Blog
 export const createBlog = async (req, res) => {
