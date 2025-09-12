@@ -3,8 +3,25 @@ import * as categoryService from "../services/categoryService.mjs";
 // GET /api/categories
 export const getCategories = async (req, res) => {
   try {
-    const categories = await categoryService.getCategories();
-    res.json({ categories, status: 200 });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+
+    const skip = (page - 1) * limit;
+
+    const { categories, total } = await categoryService.getCategories({
+      search,
+      skip,
+      limit,
+    });
+
+    res.json({
+      categories,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      status: 200,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
