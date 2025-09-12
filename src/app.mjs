@@ -9,6 +9,9 @@ import oauthRoutes from "./routes/oauthRoutes.mjs";
 import userRoutes from "./routes/usersRoutes.mjs";
 import uploadRoute from "./routes/uploadRoute.mjs";
 import categoryRoutes from "./routes/categoryRoutes.mjs";
+import blogRoutes from "./routes/blogRoutes.mjs";
+import commentRoutes from "./routes/commentRoutes.mjs";
+import likeRoutes from "./routes/likeRoutes.mjs";
 
 const app = express();
 connectDB();
@@ -26,11 +29,14 @@ app.use("/api/oauth", oauthRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/files", uploadRoute);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/blogs", blogRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/likes", likeRoutes);
 
 app.get("/test", (req, res) => {
   res.status(200).json({ message: "Test route works!" });
 });
 
-// app.listen(4000);
+app.listen(4000);
 
 export default app;
