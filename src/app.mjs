@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.mjs";
 import oauthRoutes from "./routes/oauthRoutes.mjs";
 import userRoutes from "./routes/usersRoutes.mjs";
 import uploadRoute from "./routes/uploadRoute.mjs";
+import categoryRoutes from "./routes/categoryRoutes.mjs";
 
 const app = express();
 connectDB();
@@ -24,6 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/oauth", oauthRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/files", uploadRoute);
+app.use("/api/categories", categoryRoutes);
 
 app.get("/test", (req, res) => {
   res.status(200).json({ message: "Test route works!" });
