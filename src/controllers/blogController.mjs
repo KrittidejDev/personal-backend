@@ -27,20 +27,44 @@ export const createBlog = async (req, res) => {
   }
 };
 
-// ✅ ดึง Blog ทั้งหมด
+// ✅ ดึง Blog ทั้งหมด (พร้อม pagination, search, status, category)
 export const getAllBlogs = async (req, res) => {
   try {
-    const { page, limit, search, status, category } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+    const status = req.query.status || ""; // "Draft" หรือ "Publish"
+    const category = req.query.category || "";
 
-    const data = await blogService.getAllBlogs({
-      page: parseInt(page) || 1,
-      limit: parseInt(limit) || 10,
-      search,
-      status,
-      category,
+    const skip = (page - 1) * limit;
+
+    const filters = {};
+
+    if (search) {
+      filters.title = { $regex: search, $options: "i" }; // case-insensitive
+    }
+
+    if (status) {
+      filters.status = status;
+    }
+
+    if (category) {
+      filters.category = category;
+    }
+
+    const { blogs, total } = await blogService.getBlogsWithFilters({
+      filters,
+      skip,
+      limit,
     });
 
-    res.json(data);
+    res.json({
+      blogs,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      status: 200,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
