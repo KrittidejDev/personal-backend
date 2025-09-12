@@ -1,4 +1,4 @@
-import { Category } from "../models/CategoryModel.mjs";
+import { Category } from "../models/categoryModel.mjs";
 
 // ดึงทั้งหมด
 export const getCategories = async ({ search, skip, limit }) => {
