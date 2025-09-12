@@ -4,7 +4,7 @@ import * as categoryService from "../services/categoryService.mjs";
 export const getCategories = async (req, res) => {
   try {
     const categories = await categoryService.getCategories();
-    res.json(categories);
+    res.json({ categories, status: 200 });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -16,7 +16,7 @@ export const getCategoryById = async (req, res) => {
     const category = await categoryService.getCategoryById(req.params.id);
     if (!category)
       return res.status(404).json({ message: "Category not found" });
-    res.json(category);
+    res.json({ category, status: 200 });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -26,7 +26,7 @@ export const getCategoryById = async (req, res) => {
 export const createCategory = async (req, res) => {
   try {
     const category = await categoryService.createCategory(req.body);
-    res.status(201).json(category);
+    res.status(201).json({ category, status: 201 });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -41,7 +41,7 @@ export const updateCategory = async (req, res) => {
     );
     if (!category)
       return res.status(404).json({ message: "Category not found" });
-    res.json(category);
+    res.json({ category, status: 200 });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -53,7 +53,7 @@ export const deleteCategory = async (req, res) => {
     const category = await categoryService.deleteCategory(req.params.id);
     if (!category)
       return res.status(404).json({ message: "Category not found" });
-    res.json({ message: "Category deleted" });
+    res.json({ message: "Category deleted", status: 200 });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
