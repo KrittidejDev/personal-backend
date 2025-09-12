@@ -30,8 +30,17 @@ export const createBlog = async (req, res) => {
 // ✅ ดึง Blog ทั้งหมด
 export const getAllBlogs = async (req, res) => {
   try {
-    const blogs = await blogService.getAllBlogs();
-    res.json(blogs);
+    const { page, limit, search, status, category } = req.query;
+
+    const data = await blogService.getAllBlogs({
+      page: parseInt(page) || 1,
+      limit: parseInt(limit) || 10,
+      search,
+      status,
+      category,
+    });
+
+    res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

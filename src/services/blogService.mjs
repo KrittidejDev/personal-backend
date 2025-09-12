@@ -5,8 +5,40 @@ export const createBlog = async (data) => {
   return await blog.save();
 };
 
-export const getAllBlogs = async () => {
-  return await Blog.find().populate("category author").sort({ createdAt: -1 }); // เรียงตามล่าสุด
+export const getAllBlogs = async ({
+  page = 1,
+  limit = 10,
+  search,
+  status,
+  category,
+}) => {
+  const query = {};
+
+  if (search) {
+    query.$or = [
+      { title: { $regex: search, $options: "i" } },
+      { subTitle: { $regex: search, $options: "i" } },
+    ];
+  }
+
+  if (status) {
+    query.status = status; // "Draft" หรือ "Publish"
+  }
+
+  if (category) {
+    query.category = category; // category ID
+  }
+
+  const skip = (page - 1) * limit;
+  const total = await Blog.countDocuments(query);
+
+  const blogs = await Blog.find(query)
+    .populate("category author")
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  return { blogs, total };
 };
 
 export const getBlogById = async (id) => {
