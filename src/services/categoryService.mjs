@@ -1,8 +1,19 @@
 import { Category } from "../models/CategoryModel.mjs";
 
 // ดึงทั้งหมด
-export const getCategories = async () => {
-  return await Category.find().sort({ createdAt: -1 });
+export const getCategories = async ({ search, skip, limit }) => {
+  const query = search
+    ? { name: { $regex: search, $options: "i" } } // case-insensitive
+    : {};
+
+  const total = await Category.countDocuments(query);
+
+  const categories = await Category.find(query)
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: -1 }); // เรียงล่าสุดก่อน
+
+  return { categories, total };
 };
 
 // ดึงทีละตัว
