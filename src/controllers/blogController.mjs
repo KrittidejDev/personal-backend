@@ -91,7 +91,7 @@ export const updateBlog = async (req, res) => {
     };
 
     const data = await blogService.updateBlog(req.params.id, temp);
-    if (!blog) return res.status(404).json({ message: "Blog not found" });
+    if (!data) return res.status(404).json({ message: "Blog not found" });
     res.json({ data: [data], status: 200 });
   } catch (err) {
     res.status(400).json({ error: err.message });
