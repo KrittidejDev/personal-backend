@@ -52,14 +52,14 @@ export const getAllBlogs = async (req, res) => {
       filters.category = category;
     }
 
-    const { data, total } = await blogService.getBlogsWithFilters({
+    const { blogs, total } = await blogService.getBlogsWithFilters({
       filters,
       skip,
       limit,
     });
 
     res.json({
-      data: [data],
+      data: [blogs],
       total,
       page,
       totalPages: Math.ceil(total / limit),
