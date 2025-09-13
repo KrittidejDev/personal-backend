@@ -82,7 +82,7 @@ export const login = async (req, res) => {
 export const getMe = async (req, res) => {
   try {
     // req.user ถูก inject จาก protect middleware
-    const user = await User.findById(req.user.id).select("-password"); // เอา password ออก
+    const user = await User.findById(req.user._id).select("-password"); // เอา password ออก
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // ถ้า avatar ยังว่าง ให้ใส่ default
