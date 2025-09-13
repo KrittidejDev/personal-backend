@@ -21,7 +21,7 @@ export const createBlog = async (req, res) => {
     };
 
     const data = await blogService.createBlog(blogData);
-    res.status(201).json({ data: data, status: 201 });
+    res.status(201).json({ data: [data], status: 201 });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -59,7 +59,7 @@ export const getAllBlogs = async (req, res) => {
     });
 
     res.json({
-      data: data,
+      data: [data],
       total,
       page,
       totalPages: Math.ceil(total / limit),
@@ -75,7 +75,7 @@ export const getBlogById = async (req, res) => {
   try {
     const data = await blogService.getBlogById(req.params.id);
     if (!data) return res.status(404).json({ message: "Blog not found" });
-    res.json({ data: data, status: 200 });
+    res.json({ data: [data], status: 200 });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -92,7 +92,7 @@ export const updateBlog = async (req, res) => {
 
     const data = await blogService.updateBlog(req.params.id, temp);
     if (!blog) return res.status(404).json({ message: "Blog not found" });
-    res.json({ data: data, status: 200 });
+    res.json({ data: [data], status: 200 });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
