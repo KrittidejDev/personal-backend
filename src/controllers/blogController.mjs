@@ -4,7 +4,7 @@ import { Category } from "../models/CategoryModel.mjs";
 // ✅ สร้าง Blog
 export const createBlog = async (req, res) => {
   try {
-    const { title, subtitle, content, category, image } = req.body;
+    const { title, subtitle, content, category, image, status } = req.body;
 
     const categoryExists = await Category.findById(category);
     if (!categoryExists)
@@ -12,7 +12,7 @@ export const createBlog = async (req, res) => {
 
     const blogData = {
       title,
-      subTitle,
+      subtitle,
       content,
       category,
       image,
