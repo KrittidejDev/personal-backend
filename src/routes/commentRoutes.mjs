@@ -8,5 +8,6 @@ router.post("/", commentController.createComment);
 router.get("/blog/:blogId", commentController.getCommentsByBlog);
 router.put("/:id", commentController.updateComment);
 router.delete("/:id", commentController.deleteComment);
+router.post("/reply/:id", commentController.replyComment);
 
 export default router;

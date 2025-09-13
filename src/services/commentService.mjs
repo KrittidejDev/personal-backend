@@ -1,16 +1,16 @@
 import Comment from "../models/commentModel.mjs";
+import Blog from "../models/blogModel.mjs";
+import notificationService from "./notificationService.mjs";
 
+// สร้าง comment
 export const createComment = async (data) => {
   const { blog, user, content } = data;
 
-  // ✅ บันทึก comment
   const comment = await Comment.create({ blog, user, content });
 
-  // ✅ หาเจ้าของ Blog เพื่อตั้ง recipient
   const blogData = await Blog.findById(blog);
   if (!blogData) throw new Error("Blog not found");
 
-  // ✅ ถ้าไม่ใช่เจ้าของคอมเมนต์เอง → สร้าง notification
   if (String(blogData.author) !== String(user)) {
     await notificationService.create({
       recipient: blogData.author,
@@ -25,6 +25,7 @@ export const createComment = async (data) => {
   return comment;
 };
 
+// สร้าง reply
 export const replyComment = async (parentId, data) => {
   const { blog, user, content } = data;
 
@@ -33,7 +34,6 @@ export const replyComment = async (parentId, data) => {
 
   const reply = await Comment.create({ blog, user, content, parent: parentId });
 
-  // ✅ แจ้งเตือนเจ้าของคอมเมนต์ที่ถูก reply
   if (String(parent.user._id) !== String(user)) {
     await notificationService.create({
       recipient: parent.user._id,
@@ -41,23 +41,43 @@ export const replyComment = async (parentId, data) => {
       type: "reply",
       blog,
       comment: reply._id,
-      message: `replied to your comment`,
+      message: "replied to your comment",
     });
   }
 
   return reply;
 };
 
+// ดึง comment + reply
 export const getCommentsByBlog = async (blogId) => {
-  return await Comment.find({ blog: blogId })
+  const comments = await Comment.find({ blog: blogId, parent: null })
     .populate("user")
-    .sort({ createdAt: 1 });
+    .sort({ createdAt: 1 })
+    .lean();
+
+  for (let comment of comments) {
+    comment.replies = await Comment.find({ parent: comment._id })
+      .populate("user")
+      .sort({ createdAt: 1 });
+  }
+
+  return comments;
 };
 
+// อัปเดต comment/reply
 export const updateComment = async (id, data) => {
   return await Comment.findByIdAndUpdate(id, data, { new: true });
 };
 
-export const deleteComment = async (id) => {
+// ลบ comment/reply โดยเจ้าของหรือ admin
+export const deleteComment = async (id, user) => {
+  const comment = await Comment.findById(id);
+  if (!comment) throw new Error("Comment not found");
+
+  if (String(comment.user) !== String(user._id) && user.role !== "admin") {
+    throw new Error("You are not authorized to delete this comment");
+  }
+
+  // cascade delete reply และ notification จะทำงานจาก pre hook
   return await Comment.findByIdAndDelete(id);
 };

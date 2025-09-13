@@ -45,9 +45,9 @@ export const updateComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   try {
-    await commentService.deleteComment(req.params.id);
-    res.json({ message: "Comment deleted", status: 200 });
+    await commentService.deleteComment(req.params.id, req.user);
+    res.json({ message: "Comment/reply deleted", status: 200 });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(403).json({ error: err.message });
   }
 };
