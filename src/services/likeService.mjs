@@ -3,9 +3,25 @@ import Blog from "../models/blogModel.mjs";
 
 export const likeBlog = async (blogId, userId) => {
   try {
+    const blog = await Blog.findById(blogId);
+    if (!blog) throw new Error("Blog not found");
+
     const like = await Like.create({ blog: blogId, user: userId });
-    // เพิ่ม likesCount ใน Blog
+
+    // ✅ เพิ่ม likesCount
     await Blog.findByIdAndUpdate(blogId, { $inc: { likesCount: 1 } });
+
+    // ✅ สร้าง Notification (ถ้าไม่ใช่คน like บล็อกตัวเอง)
+    if (String(blog.author) !== String(userId)) {
+      await notificationService.create({
+        recipient: blog.author,
+        sender: userId,
+        type: "like",
+        blog: blogId,
+        message: "liked your blog",
+      });
+    }
+
     return like;
   } catch (err) {
     throw err;
