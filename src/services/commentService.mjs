@@ -1,6 +1,6 @@
 import Comment from "../models/commentModel.mjs";
 import Blog from "../models/blogModel.mjs";
-import notificationService from "./notificationService.mjs";
+import { notificationService } from "./notificationService.mjs";
 
 // สร้าง comment
 export const createComment = async (data) => {

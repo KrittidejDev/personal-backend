@@ -1,4 +1,4 @@
-import Notification from "../models/notificationModal.mjs";
+import Notification from "../models/notificationModel.mjs";
 
 export const notificationService = {
   async create({ recipient, sender, type, blog, comment, message }) {
