@@ -32,7 +32,7 @@ export const getCategoryById = async (req, res) => {
   try {
     const data = await categoryService.getCategoryById(req.params.id);
     if (!data) return res.status(404).json({ message: "Category not found" });
-    res.json({ data: data, status: 200 });
+    res.json({ data: [data], status: 200 });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -42,7 +42,7 @@ export const getCategoryById = async (req, res) => {
 export const createCategory = async (req, res) => {
   try {
     const data = await categoryService.createCategory(req.body);
-    res.status(201).json({ data: data, status: 201 });
+    res.status(201).json({ data: [data], status: 201 });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -53,7 +53,7 @@ export const updateCategory = async (req, res) => {
   try {
     const data = await categoryService.updateCategory(req.params.id, req.body);
     if (!data) return res.status(404).json({ message: "Category not found" });
-    res.json({ data: data, status: 200 });
+    res.json({ data: [data], status: 200 });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

@@ -7,7 +7,7 @@ export const createComment = async (req, res) => {
       user: req.user._id, // ต้องมี auth middleware
     };
     const data = await commentService.createComment(commentData);
-    res.status(201).json({ data: data, status: 201 });
+    res.status(201).json({ data: [data], status: 201 });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -16,7 +16,7 @@ export const createComment = async (req, res) => {
 export const getCommentsByBlog = async (req, res) => {
   try {
     const data = await commentService.getCommentsByBlog(req.params.blogId);
-    res.json({ data: data, status: 200 });
+    res.json({ data: [data], status: 200 });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -25,7 +25,7 @@ export const getCommentsByBlog = async (req, res) => {
 export const updateComment = async (req, res) => {
   try {
     const data = await commentService.updateComment(req.params.id, req.body);
-    res.json({ data: data, status: 200 });
+    res.json({ data: [data], status: 200 });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
