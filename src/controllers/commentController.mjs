@@ -13,6 +13,18 @@ export const createComment = async (req, res) => {
   }
 };
 
+export const replyComment = async (req, res) => {
+  try {
+    const data = await commentService.replyComment(req.params.id, {
+      ...req.body,
+      user: req.user._id,
+    });
+    res.status(201).json({ data: [data], status: 201 });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
 export const getCommentsByBlog = async (req, res) => {
   try {
     const data = await commentService.getCommentsByBlog(req.params.blogId);

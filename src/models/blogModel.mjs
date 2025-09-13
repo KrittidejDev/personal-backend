@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
+import Comment from "./commentModel.mjs";
+import Like from "./likeModel.mjs";
+import Notification from "./notificationModel.mjs";
 
 const blogSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    subtitle: { type: String }, // ✅ เพิ่ม subtitle
+    subtitle: { type: String },
     content: { type: String, required: true },
     category: {
       type: mongoose.Schema.Types.ObjectId,
@@ -25,5 +28,17 @@ const blogSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// ✅ Cascade delete: ลบ Comments, Likes, Notifications
+blogSchema.pre("findOneAndDelete", async function (next) {
+  const blogId = this.getQuery()["_id"];
+  if (!blogId) return next();
+
+  await Comment.deleteMany({ blog: blogId });
+  await Like.deleteMany({ blog: blogId });
+  await Notification.deleteMany({ blog: blogId });
+
+  next();
+});
 
 export default mongoose.model("Blog", blogSchema);
