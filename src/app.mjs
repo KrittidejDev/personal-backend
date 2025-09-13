@@ -12,6 +12,7 @@ import categoryRoutes from "./routes/categoryRoutes.mjs";
 import blogRoutes from "./routes/blogRoutes.mjs";
 import commentRoutes from "./routes/commentRoutes.mjs";
 import likeRoutes from "./routes/likeRoutes.mjs";
+import notificationRoutes from "./routes/notificationRoutes.mjs";
 
 const app = express();
 connectDB();
@@ -32,6 +33,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/likes", likeRoutes);
+app.use("/api/likes", notificationRoutes);
 
 app.get("/test", (req, res) => {
   res.status(200).json({ message: "Test route works!" });
