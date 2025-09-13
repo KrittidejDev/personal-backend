@@ -20,8 +20,8 @@ export const createBlog = async (req, res) => {
       author: req.user._id,
     };
 
-    const blog = await blogService.createBlog(blogData);
-    res.status(201).json(blog);
+    const data = await blogService.createBlog(blogData);
+    res.status(201).json({ data: data, status: 201 });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -52,14 +52,14 @@ export const getAllBlogs = async (req, res) => {
       filters.category = category;
     }
 
-    const { blogs, total } = await blogService.getBlogsWithFilters({
+    const { data, total } = await blogService.getBlogsWithFilters({
       filters,
       skip,
       limit,
     });
 
     res.json({
-      blogs,
+      data: data,
       total,
       page,
       totalPages: Math.ceil(total / limit),
@@ -73,9 +73,9 @@ export const getAllBlogs = async (req, res) => {
 // ✅ ดึง Blog ตาม ID
 export const getBlogById = async (req, res) => {
   try {
-    const blog = await blogService.getBlogById(req.params.id);
-    if (!blog) return res.status(404).json({ message: "Blog not found" });
-    res.json(blog);
+    const data = await blogService.getBlogById(req.params.id);
+    if (!data) return res.status(404).json({ message: "Blog not found" });
+    res.json({ data: data, status: 200 });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -84,15 +84,15 @@ export const getBlogById = async (req, res) => {
 // ✅ อัปเดต Blog
 export const updateBlog = async (req, res) => {
   try {
-    const data = {
+    const temp = {
       ...req.body,
       image: req.body.image || undefined,
       status: req.body.status, // อัปเดต status ได้
     };
 
-    const blog = await blogService.updateBlog(req.params.id, data);
+    const data = await blogService.updateBlog(req.params.id, temp);
     if (!blog) return res.status(404).json({ message: "Blog not found" });
-    res.json(blog);
+    res.json({ data: data, status: 200 });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -104,7 +104,7 @@ export const deleteBlog = async (req, res) => {
     const blog = await blogService.deleteBlog(req.params.id);
     if (!blog) return res.status(404).json({ message: "Blog not found" });
 
-    res.json({ message: "Blog deleted" });
+    res.json({ status: 200, message: "Blog deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

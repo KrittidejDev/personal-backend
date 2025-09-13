@@ -12,6 +12,7 @@ export const uploadController = async (req, res) => {
       message: "File uploaded successfully",
       url: result.secure_url,
       public_id: result.public_id,
+      status: 201,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -28,6 +29,7 @@ export const deleteController = async (req, res) => {
     res.status(200).json({
       message: "File deleted successfully",
       result,
+      status: 200,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

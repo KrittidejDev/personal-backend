@@ -30,10 +30,9 @@ export const getCategories = async (req, res) => {
 // GET /api/categories/:id
 export const getCategoryById = async (req, res) => {
   try {
-    const category = await categoryService.getCategoryById(req.params.id);
-    if (!category)
-      return res.status(404).json({ message: "Category not found" });
-    res.json({ category, status: 200 });
+    const data = await categoryService.getCategoryById(req.params.id);
+    if (!data) return res.status(404).json({ message: "Category not found" });
+    res.json({ data: data, status: 200 });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -42,8 +41,8 @@ export const getCategoryById = async (req, res) => {
 // POST /api/categories
 export const createCategory = async (req, res) => {
   try {
-    const category = await categoryService.createCategory(req.body);
-    res.status(201).json({ category, status: 201 });
+    const data = await categoryService.createCategory(req.body);
+    res.status(201).json({ data: data, status: 201 });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -52,13 +51,9 @@ export const createCategory = async (req, res) => {
 // PUT /api/categories/:id
 export const updateCategory = async (req, res) => {
   try {
-    const category = await categoryService.updateCategory(
-      req.params.id,
-      req.body
-    );
-    if (!category)
-      return res.status(404).json({ message: "Category not found" });
-    res.json({ category, status: 200 });
+    const data = await categoryService.updateCategory(req.params.id, req.body);
+    if (!data) return res.status(404).json({ message: "Category not found" });
+    res.json({ data: data, status: 200 });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

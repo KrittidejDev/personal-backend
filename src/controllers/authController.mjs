@@ -87,8 +87,9 @@ export const getMe = async (req, res) => {
 
     // ถ้า avatar ยังว่าง ให้ใส่ default
     if (!user.avatar) user.avatar = "https://example.com/default-avatar.png";
+    const { password: _, ...userData } = user.toObject();
 
-    res.status(200).json({ ...user, status: 200 });
+    res.status(200).json({ ...userData, status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
