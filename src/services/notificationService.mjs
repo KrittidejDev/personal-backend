@@ -22,7 +22,7 @@ export const notificationService = {
   async markAsRead(notificationId) {
     return await Notification.findByIdAndUpdate(
       notificationId,
-      { isRead: true },
+      { read: true },
       { new: true }
     );
   },
