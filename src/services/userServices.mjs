@@ -1,6 +1,11 @@
 import User from "../models/UserModel.mjs";
 import bcrypt from "bcryptjs";
 
+// get public
+export const getPublicAdminProfile = async () => {
+  return await User.findOne({ role: "admin" }).select("name bio avatar -_id");
+};
+
 // ดึงข้อมูล user โดย id
 export const getUserById = async (id) => {
   return await User.findById(id).select("-password");

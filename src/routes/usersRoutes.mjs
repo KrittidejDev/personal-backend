@@ -4,9 +4,13 @@ import {
   getUser,
   updateUser,
   changePassword,
+  getPublicAdminProfile,
 } from "../controllers/usersControllers.mjs";
 
 const router = express.Router();
+
+// get admin public
+router.get("/public", getPublicAdminProfile);
 
 // GET user by id
 router.get("/:id", protect, getUser);
