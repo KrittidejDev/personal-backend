@@ -12,7 +12,10 @@ const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, sparse: true },
   password: { type: String },
   name: { type: String },
-  avatar: { type: String },
+  avatar: {
+    url: { type: String, default: "" },
+    public_id: { type: String, default: "" },
+  },
   bio: { type: String, default: "" },
   role: { type: String, enum: ["user", "admin"], default: "user" },
   createdAt: { type: Date, default: Date.now },
