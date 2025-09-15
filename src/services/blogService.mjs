@@ -22,7 +22,7 @@ export const getBlogsWithFilters = async ({ filters, skip, limit }) => {
 export const getBlogById = async (id) => {
   const blog = await Blog.findById(id)
     .populate("category", "name")
-    .populate("author", "name email avatar")
+    .populate("author", "name email avatar bio")
     .lean();
 
   if (!blog) return null;
