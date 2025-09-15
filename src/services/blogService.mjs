@@ -18,7 +18,38 @@ export const getBlogsWithFilters = async ({ filters, skip, limit }) => {
 };
 
 export const getBlogById = async (id) => {
-  return await Blog.findById(id).populate("category author");
+  const blog = await Blog.findById(id)
+    .populate("category", "name")
+    .populate("author", "name email avatar")
+    .lean();
+
+  if (!blog) return null;
+
+  // ดึง comments หลัก
+  const comments = await Comment.find({ blog: id, parent: null })
+    .populate("user", "name avatar")
+    .sort({ createdAt: 1 })
+    .lean();
+
+  // ดึง replies ของแต่ละ comment
+  for (let comment of comments) {
+    comment.replies = await Comment.find({ parent: comment._id })
+      .populate("user", "name avatar")
+      .sort({ createdAt: 1 })
+      .lean();
+  }
+
+  // ดึง likes
+  const likes = await Like.find({ blog: id })
+    .populate("user", "name avatar")
+    .lean();
+
+  return {
+    ...blog,
+    comments,
+    likesCount: likes.length,
+    likes,
+  };
 };
 
 export const updateBlog = async (id, data) => {
