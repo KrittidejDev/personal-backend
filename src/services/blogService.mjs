@@ -1,6 +1,7 @@
 import Blog from "../models/blogModel.mjs";
 import Comment from "../models/commentModel.mjs";
 import Like from "../models/likeModel.mjs";
+import User from "../models/UserModel.mjs";
 
 export const createBlog = async (data) => {
   const blog = new Blog(data);
