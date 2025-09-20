@@ -3,8 +3,10 @@ import { notificationService } from "../services/notificationService.mjs";
 export const notificationController = {
   async getNotifications(req, res) {
     try {
+      const { read } = req.query;
       const notifications = await notificationService.getUserNotifications(
-        req.user._id
+        req.user._id,
+        { read }
       );
       res.json({ data: notifications, status: 200 });
     } catch (error) {

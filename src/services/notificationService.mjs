@@ -12,8 +12,15 @@ export const notificationService = {
     });
   },
 
-  async getUserNotifications(userId) {
-    return Notification.find({ recipient: userId })
+  async getUserNotifications(userId, query = {}) {
+    const filter = { recipient: userId };
+
+    // ถ้ามี query.read ส่งมา ให้กรองตาม read
+    if (query.read !== undefined) {
+      filter.read = query.read === "true"; // แปลงเป็น Boolean
+    }
+
+    return Notification.find(filter)
       .populate("sender", "name avatar")
       .populate("blog", "title")
       .sort({ createdAt: -1 });
