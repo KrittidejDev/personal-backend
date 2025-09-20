@@ -16,6 +16,7 @@ export const createBlog = async (data) => {
         message: `published a new blog`,
       });
     }
+    io.to(recipient).emit("newNotification", notification);
   }
 
   return savedBlog;

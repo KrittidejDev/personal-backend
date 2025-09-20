@@ -45,6 +45,7 @@ export const createComment = async (data) => {
       comment: comment._id,
       message: "Comment on the article you have commented on.",
     });
+    io.to(recipient).emit("newNotification", notification);
   }
 
   return comment;

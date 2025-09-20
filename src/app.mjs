@@ -14,6 +14,9 @@ import commentRoutes from "./routes/commentRoutes.mjs";
 import likeRoutes from "./routes/likeRoutes.mjs";
 import notificationRoutes from "./routes/notificationRoutes.mjs";
 
+import { createServer } from "http";
+import { Server } from "socket.io";
+
 const app = express();
 connectDB();
 
@@ -37,6 +40,32 @@ app.use("/api/notification", notificationRoutes);
 
 app.get("/test", (req, res) => {
   res.status(200).json({ message: "Test route works!" });
+});
+
+const httpServer = createServer(app);
+export const io = new Server(httpServer, {
+  cors: {
+    origin: "*", // หรือใส่ FRONTEND_URL
+    methods: ["GET", "POST"],
+  },
+});
+
+// Socket.IO connection
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  socket.on("joinRoom", (userId) => {
+    socket.join(userId); // userId เป็น room ของแต่ละผู้ใช้
+    console.log(`User ${userId} joined room`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Server is running" });
 });
 
 // app.listen(4000);
