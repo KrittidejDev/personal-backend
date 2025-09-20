@@ -14,9 +14,6 @@ import commentRoutes from "./routes/commentRoutes.mjs";
 import likeRoutes from "./routes/likeRoutes.mjs";
 import notificationRoutes from "./routes/notificationRoutes.mjs";
 
-import { createServer } from "http";
-import { Server } from "socket.io";
-
 const app = express();
 connectDB();
 
