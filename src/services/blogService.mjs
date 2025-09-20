@@ -4,7 +4,21 @@ import Like from "../models/likeModel.mjs";
 
 export const createBlog = async (data) => {
   const blog = new Blog(data);
-  return await blog.save();
+  const savedBlog = await blog.save();
+  const allUsers = await User.find().select("_id").lean();
+  for (let user of allUsers) {
+    if (String(user._id) !== String(data.author)) {
+      await notificationService.create({
+        recipient: user._id,
+        sender: data.author,
+        type: "author",
+        blog: savedBlog._id,
+        message: `published a new blog`,
+      });
+    }
+  }
+
+  return savedBlog;
 };
 
 export const getBlogsWithFilters = async ({ filters, skip, limit }) => {

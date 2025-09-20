@@ -4,7 +4,7 @@ export const createComment = async (req, res) => {
   try {
     const commentData = {
       ...req.body,
-      user: req.user._id, // ต้องมี auth middleware
+      user: req.user._id,
     };
     const data = await commentService.createComment(commentData);
     res.status(201).json({ data: [data], status: 201 });

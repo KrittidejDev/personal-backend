@@ -22,6 +22,7 @@ export const createComment = async (data) => {
   let recipients = new Set();
 
   // เพิ่มเจ้าของบล็อกก่อน
+
   if (String(blogData.author._id) !== String(user)) {
     recipients.add(String(blogData.author._id));
   }
@@ -42,7 +43,7 @@ export const createComment = async (data) => {
       type: "comment",
       blog,
       comment: comment._id,
-      message: "commented on the blog",
+      message: "Comment on the article you have commented on.",
     });
   }
 
