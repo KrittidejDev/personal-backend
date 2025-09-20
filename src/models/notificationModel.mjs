@@ -12,7 +12,11 @@ const notificationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    type: { type: String, enum: ["comment", "reply", "like"], required: true },
+    type: {
+      type: String,
+      enum: ["comment", "reply", "like", "author"],
+      required: true,
+    },
     blog: { type: mongoose.Schema.Types.ObjectId, ref: "Blog" },
     comment: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
     message: { type: String },
