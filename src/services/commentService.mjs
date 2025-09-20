@@ -4,21 +4,45 @@ import { notificationService } from "./notificationService.mjs";
 
 // สร้าง comment
 export const createComment = async (data) => {
-  const { blog, user, content } = data;
+  const { blog, user, content, parent } = data;
 
-  const comment = await Comment.create({ blog, user, content });
+  // 1. สร้างคอมเมนต์ใหม่
+  const comment = await Comment.create({
+    blog,
+    user,
+    content,
+    parent: parent || null,
+  });
 
-  const blogData = await Blog.findById(blog);
+  // 2. ดึงข้อมูล blog
+  const blogData = await Blog.findById(blog).populate("author");
   if (!blogData) throw new Error("Blog not found");
 
-  if (String(blogData.author) !== String(user)) {
+  // 3. เก็บ user ที่ต้อง notify
+  let recipients = new Set();
+
+  // เพิ่มเจ้าของบล็อกก่อน
+  if (String(blogData.author._id) !== String(user)) {
+    recipients.add(String(blogData.author._id));
+  }
+
+  // 4. หาคนที่เคยคอมเมนต์ blog นี้
+  const previousComments = await Comment.find({ blog }).select("user");
+  previousComments.forEach((c) => {
+    if (String(c.user) !== String(user)) {
+      recipients.add(String(c.user));
+    }
+  });
+
+  // 5. สร้าง Notification ให้ทุกคน
+  for (let recipient of recipients) {
     await notificationService.create({
-      recipient: blogData.author,
+      recipient,
       sender: user,
       type: "comment",
       blog,
       comment: comment._id,
-      message: "commented on your blog",
+      message: "commented on the blog",
     });
   }
 
