@@ -5,6 +5,6 @@ import { protect } from "../middlewares/authMiddleware.mjs";
 const router = express.Router();
 
 router.get("/", protect, notificationController.getNotifications);
-router.put("/:id/read", protect, notificationController.markAsRead);
+router.put("/:id/handle", protect, notificationController.handleNotification);
 
 export default router;

@@ -26,4 +26,8 @@ export const notificationService = {
       { new: true }
     );
   },
+
+  async deleteNotification(notificationId) {
+    return Notification.findByIdAndDelete(notificationId);
+  },
 };
