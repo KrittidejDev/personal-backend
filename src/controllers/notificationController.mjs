@@ -6,7 +6,7 @@ export const notificationController = {
       const notifications = await notificationService.getUserNotifications(
         req.user._id
       );
-      res.json(notifications, { status: 200 });
+      res.json({ data: notifications, status: 200 });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -16,7 +16,7 @@ export const notificationController = {
     try {
       const { id } = req.params;
       const updated = await notificationService.markAsRead(id);
-      res.json(updated, { status: 200 });
+      res.json({ data: updated, status: 200 });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
