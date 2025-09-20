@@ -4,7 +4,7 @@ export const notificationController = {
   async getNotifications(req, res) {
     try {
       const notifications = await notificationService.getUserNotifications(
-        req.user.id
+        req.user._id
       );
       res.json(notifications);
     } catch (error) {
