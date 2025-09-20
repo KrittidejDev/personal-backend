@@ -1,5 +1,6 @@
 import Like from "../models/likeModel.mjs";
 import Blog from "../models/blogModel.mjs";
+import { notificationService } from "./notificationService.mjs";
 
 export const likeBlog = async (blogId, userId) => {
   try {
